@@ -46,8 +46,8 @@ public class BoundedStack {
             assert t != null : "ticket must not be null"; // ตรวจสอบว่าสลากไม่เป็น null
             assert !t.trim().isEmpty() : "ticket must not be empty string"; // ตรวจสอบว่าสลากไม่เป็น String ว่าง
 
-            try { // แปลงสลากจาก String เป็น int และตรวจสอบว่าหมายเลขสลากอยู่ในช่วง 1 ถึง 100
-                int num = Integer.parseInt(t);
+            try { // ลองแปลงสลากจาก String เป็น int และตรวจสอบว่าหมายเลขสลากอยู่ในช่วง 1 ถึง 100
+                int num = Integer.parseInt(t);//ฟังค์ชัน Integer.parseInt(ตั๋ว) ใช้แปลง String เป็น int
                 assert num >= MIN_TICKET && num <= MAX_TICKET : "ticket number out of range (1-100)";
             } catch (NumberFormatException e) { // ถ้าแปลงสลากจาก String เป็น int ไม่สำเร็จ โยน assert false
                 assert false : "ticket must be a valid integer string";
@@ -89,7 +89,7 @@ public class BoundedStack {
     }
 
     // ===== Mutators =====
-
+    //ก่อนใส่สลากลงในตู้ ให้ตรวจสอบว่าตู้เต็มหรือไม่ ถ้าเต็มแล้วให้โยน IllegalStateException
     /**
      * ใส่สลากลงในตู้ (วางต่อบนสุด)
      * @param ticket หมายเลขสลาก (1-100)
@@ -104,5 +104,72 @@ public class BoundedStack {
         validateTicket(ticket);// ตรวจสอบความถูกต้องของสลากก่อนที่จะใส่ลงในตู้
         tickets.add(ticket);// ใส่สลากลงในตู้ (วางต่อบนสุด)
         checkRep();// ตรวจสอบ Representation Invariant หลังจากใส่สลากลงในตู้
+    }
+
+    /**
+     * ดึงสลากใบบนสุดออกจากตู้
+     * @return หมายเลขสลากใบบนสุด
+     * @throws IllegalStateException ถ้าตู้ว่างเปล่า
+     */
+    public String pop() {// ดึงสลากใบบนสุดออกจากตู้
+        if (isEmpty()) {//ถ้ตู้ว่างเปล่าให้โยน IllegalStateException
+            throw new IllegalStateException("Stack is empty");
+        }
+        String top = tickets.remove(tickets.size() - 1);//index ของสลากใบบนสุดคือ tickets.size() - 1 ดึงสลากใบบนสุดออกจากตู้
+        checkRep();
+        return top;
+    }
+
+    // ===== Observers =====
+    //เช็คสถานะตู้สลากว่ามีสลากอยู่หรือไม่ และเช็คความจุของตู้สลาก
+    /**
+     * แอบดูสลากใบบนสุดโดยไม่ดึงออก
+     */
+    public String peek() {
+        if (isEmpty()) {//ถ้าตู้ว่างเปล่าให้โยน IllegalStateException
+            throw new IllegalStateException("Stack is empty");
+        }
+        return tickets.get(tickets.size() - 1);
+    }
+
+    public boolean isEmpty() {//เช็คสถานะตู้สลากว่ามีสลากอยู่หรือไม่
+        return tickets.isEmpty();
+    }
+
+    public boolean isFull() {//เช็คความจุของตู้สลากว่าตู้เต็มหรือไม่
+        return tickets.size() == capacity;
+    }
+
+    public int size() {//เช็คจำนวนสลากที่อยู่ในตู้สลาก
+        return tickets.size();
+    }
+
+    public int capacity() {//เช็คความจุของตู้สลาก
+        return capacity;
+    }
+
+    /**
+     * คืนรายการสลากทั้งหมดตามลำดับจากก้นตู้ไปใบบนสุด
+     */
+    public List<String> getTickets() {// คืนรายการสลากทั้งหมดตามลำดับจากก้นตู้ไปใบบนสุด
+        return new ArrayList<>(tickets); // Copy คืนไป ป้องกัน Rep Exposure
+    }
+
+    // ===== Producer =====
+
+    /**
+     * คัดลอกตู้สลากใบใหม่ที่มีสลากข้างในเหมือนเดิมทุกประการ
+     */
+    public BoundedStack copy() {// คัดลอกตู้สลากใบใหม่ที่มีสลากข้างในเหมือนเดิมทุกประการ
+        BoundedStack newStack = new BoundedStack(this.capacity);// สร้างตู้สลากใบใหม่ที่มีความจุเท่ากับตู้สลากเดิม
+        for (String ticket : this.tickets) {// วนลูปสลากทุกใบในตู้สลากเดิม
+            newStack.push(ticket);// ใส่สลากลงในตู้สลากใบใหม่
+        }
+        return newStack;// คืนตู้สลากใบใหม่
+    }
+    
+    @Override
+    public String toString() {
+        return tickets.toString();
     }
 }
