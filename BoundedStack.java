@@ -66,7 +66,9 @@ public class BoundedStack {
         if (capacity <= 0) {//ถ้าขนาดความจุน้อยกว่าหรือเท่ากับ 0 ให้โยน IllegalArgumentException
             throw new IllegalArgumentException("Capacity must be greater than 0");
         }
-        
+     if (capacity > 100) {//ถ้าขนาดความจุมากกว่า 100 ให้โยน IllegalArgumentException เพราะตั๋วห้ามซ้ำ
+    throw new IllegalArgumentException("Capacity cannot exceed 100 unique tickets");
+    }
         this.tickets = new ArrayList<>(); // สร้าง ArrayList ว่างเปล่าเพื่อเก็บสลาก
         this.capacity = capacity; // กำหนดความจุสูงสุดของตู้
         checkRep();
@@ -86,6 +88,9 @@ public class BoundedStack {
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Ticket must be a valid number");// ถ้าแปลงสลากจาก String เป็น int ไม่สำเร็จ ให้โยน IllegalArgumentException
         }
+        if (tickets.contains(ticket)) {// ตรวจสอบว่าสลากไม่ซ้ำกับสลากที่มีอยู่ในตู้
+        throw new IllegalArgumentException("Ticket already exists in the stack");
+    }
     }
 
     // ===== Mutators =====
