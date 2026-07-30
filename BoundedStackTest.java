@@ -44,3 +44,12 @@ public class BoundedStackTest {
         BoundedStack stack = new BoundedStack(5);
         check("new BoundedStack(5) -> empty", stack.isEmpty());
         check("capacity is 5", stack.capacity() == 5);
+          boolean threwInvalidCap = false;
+        try {
+            new BoundedStack(0);
+        } catch (IllegalArgumentException e) {
+            threwInvalidCap = true;
+        }
+        check("new BoundedStack(0) -> throws Exception", threwInvalidCap);
+    }
+
