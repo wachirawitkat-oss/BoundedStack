@@ -52,4 +52,33 @@ public class BoundedStackTest {
         }
         check("new BoundedStack(0) -> throws Exception", threwInvalidCap);
     }
+     private static void testPush() {
+        System.out.println("\n-- Push --");
+        BoundedStack stack = new BoundedStack(2);
+        stack.push("1");
+        check("push('1') -> size 1", stack.size() == 1);
+        check("peek() -> '1'", stack.peek().equals("1"));
+
+        stack.push("100");
+        check("push('100') -> isFull", stack.isFull());
+
+        // Push ตอนเต็มต้องโดน IllegalStateException
+        boolean threwFull = false;
+        try {
+            stack.push("50");
+        } catch (IllegalStateException e) {
+            threwFull = true;
+        }
+        check("push when full -> throws IllegalStateException", threwFull);
+
+        // Push ค่าผิดเงื่อนไขต้องโดน IllegalArgumentException
+        boolean threwOutOfRange = false;
+        try {
+            BoundedStack s2 = new BoundedStack(5);
+            s2.push("101");
+        } catch (IllegalArgumentException e) {
+            threwOutOfRange = true;
+        }
+        check("push('101') -> throws IllegalArgumentException", threwOutOfRange);
+    }
 
