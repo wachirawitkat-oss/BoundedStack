@@ -39,3 +39,8 @@ public class BoundedStackTest {
             System.exit(1);
         }
     }
+     private static void testCreators() {
+        System.out.println("-- Creators --");
+        BoundedStack stack = new BoundedStack(5);
+        check("new BoundedStack(5) -> empty", stack.isEmpty());
+        check("capacity is 5", stack.capacity() == 5);
