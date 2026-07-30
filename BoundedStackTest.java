@@ -169,4 +169,35 @@ public class BoundedStackTest {
         }
         check("push(null) -> throws IllegalArgumentException", threwNull);
 
+          // ticket ที่ไม่ใช่ตัวเลข
+        boolean threwNonNumeric = false;
+        try {
+            new BoundedStack(5).push("abc");
+        } catch (IllegalArgumentException e) {
+            threwNonNumeric = true;
+        }
+        check("push('abc') -> throws IllegalArgumentException", threwNonNumeric);
+
+        // capacity เกิน 100 ต้องโดน IllegalArgumentException เพราะตั๋วห้ามซ้ำ
+        boolean threwOverCapacity = false;
+        try {
+            new BoundedStack(101);
+        } catch (IllegalArgumentException e) {
+            threwOverCapacity = true;
+        }
+        check("new BoundedStack(101) -> throws IllegalArgumentException", threwOverCapacity);
+
+        // ตั๋วซ้ำต้องโดน IllegalArgumentException
+        boolean threwDuplicate = false;
+        try {
+            BoundedStack dupStack = new BoundedStack(5);
+            dupStack.push("7");
+            dupStack.push("7");
+        } catch (IllegalArgumentException e) {
+            threwDuplicate = true;
+        }
+        check("push duplicate ticket -> throws IllegalArgumentException", threwDuplicate);
+    }
+}
+
 
