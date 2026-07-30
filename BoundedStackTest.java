@@ -131,4 +131,42 @@ public class BoundedStackTest {
         list.clear();
         check("clearing result of getTickets() does not mutate stack", stack.size() == 1);
     }
+     private static void testEdgeCases() {
+        System.out.println("\n-- Edge Cases --");
+
+        // capacity ติดลบต้องโดน IllegalArgumentException เหมือน capacity = 0
+        boolean threwNegativeCap = false;
+        try {
+            new BoundedStack(-5);
+        } catch (IllegalArgumentException e) {
+            threwNegativeCap = true;
+        }
+        check("new BoundedStack(-5) -> throws IllegalArgumentException", threwNegativeCap);
+
+        // boundary: capacity = 1 คือขอบเขตล่างสุดที่ยัง valid
+        BoundedStack capOne = new BoundedStack(1);
+        capOne.push("42");
+        boolean fullThenEmpty = capOne.isFull();
+        capOne.pop();
+        fullThenEmpty = fullThenEmpty && capOne.isEmpty();
+        check("capacity 1 -> full after push, empty after pop", fullThenEmpty);
+
+        // ticket = "0" คือขอบเขตล่างที่ผิดเงื่อนไข (MIN_TICKET = 1)
+        boolean threwZero = false;
+        try {
+            new BoundedStack(5).push("0");
+        } catch (IllegalArgumentException e) {
+            threwZero = true;
+        }
+        check("push('0') -> throws IllegalArgumentException", threwZero);
+
+        // ticket = null
+        boolean threwNull = false;
+        try {
+            new BoundedStack(5).push(null);
+        } catch (IllegalArgumentException e) {
+            threwNull = true;
+        }
+        check("push(null) -> throws IllegalArgumentException", threwNull);
+
 
