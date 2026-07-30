@@ -108,4 +108,27 @@ public class BoundedStackTest {
         stack.push("5");
         check("peek() doesn't remove element", stack.peek().equals("5") && stack.size() == 1);
     }
+    private static void testProducer() {
+        System.out.println("\n-- Producer (copy) --");
+        BoundedStack original = new BoundedStack(5);
+        original.push("1");
+        original.push("2");
+
+        BoundedStack copied = original.copy();
+        check("copied has same size", copied.size() == original.size());
+        check("copied top is same", copied.peek().equals(original.peek()));
+
+        copied.push("3");
+        check("mutating copy does not affect original", original.size() == 2 && copied.size() == 3);
+    }
+
+    private static void testExposure() {
+        System.out.println("\n-- Representation Exposure --");
+        BoundedStack stack = new BoundedStack(5);
+        stack.push("10");
+
+        List<String> list = stack.getTickets();
+        list.clear();
+        check("clearing result of getTickets() does not mutate stack", stack.size() == 1);
+    }
 
