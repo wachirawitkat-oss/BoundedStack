@@ -81,4 +81,31 @@ public class BoundedStackTest {
         }
         check("push('101') -> throws IllegalArgumentException", threwOutOfRange);
     }
+     private static void testPop() {
+        System.out.println("\n-- Pop --");
+        BoundedStack stack = new BoundedStack(5);
+        stack.push("10");
+        stack.push("20");
+
+        check("pop() -> returns '20' (LIFO)", stack.pop().equals("20"));
+        check("size decreases to 1", stack.size() == 1);
+        check("pop() -> returns '10'", stack.pop().equals("10"));
+        check("stack is empty", stack.isEmpty());
+
+        // Pop ตอนว่างเปล่า
+        boolean threwEmpty = false;
+        try {
+            stack.pop();
+        } catch (IllegalStateException e) {
+            threwEmpty = true;
+        }
+        check("pop on empty -> throws IllegalStateException", threwEmpty);
+    }
+
+    private static void testObservers() {
+        System.out.println("\n-- Observers --");
+        BoundedStack stack = new BoundedStack(3);
+        stack.push("5");
+        check("peek() doesn't remove element", stack.peek().equals("5") && stack.size() == 1);
+    }
 
