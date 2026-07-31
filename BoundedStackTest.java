@@ -181,7 +181,7 @@ public class BoundedStackTest {  //ประกาศคลาสปทดสอ
         } catch (IllegalArgumentException e) {      // ดักจับ IllegalArgumentException
             threwNonNumeric = true;       // ตั้ง flag เป็น true ถ้าโยน exception จริง
         }
-        // (แก้บั๊ก: เดิมมี } เกินมาตรงนี้ 1 ตัว ทำให้ method testEdgeCases() ปิดตัวก่อนกำหนด
+        // (แก้errorrแดง: เดิมมี } เกินมาตรงนี้ 1 ตัว ทำให้ method testEdgeCases() ปิดตัวก่อนกำหนด
         //  ส่งผลให้โค้ดข้างล่างทั้งหมด (เช็ค abc, capacity>100, ตั๋วซ้ำ) หลุดไปอยู่นอก method -> compile error)
         check("push('abc') -> throws IllegalArgumentException", threwNonNumeric);// เช็คผล
 
